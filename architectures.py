@@ -73,7 +73,6 @@ class Encoder:
     tensor_list = []
     for n_layer,layer in enumerate(self.vgg19_norm):
       out = layer(out)
-      print(out.shape)
       if n_layer in layer_list:
         tensor_list.append(out)
         if n_layer == layer_list[-1]:
