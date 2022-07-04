@@ -69,10 +69,11 @@ class Encoder:
 
   def forward(self, input, lista = False):
     out = input
-    layer_list = [3, 10, 17, 30]
+    layer_list = [3, 10, 17, 30] # These are the positions of the interest layer (where we want to compute the loss).
     tensor_list = []
     for n_layer,layer in enumerate(self.vgg19_norm):
       out = layer(out)
+      print(out.shape)
       if n_layer in layer_list:
         tensor_list.append(out)
         if n_layer == layer_list[-1]:
@@ -87,7 +88,7 @@ class Decoder(nn.Module):
     super().__init__()
 
     self.padding = nn.ReflectionPad2d(padding=1) # Using reflection padding as described in vgg19
-    self.UpSample = nn.Upsample(scale_factor=2, mode="nearest")
+    self.US = nn.Upsample(scale_factor=2, mode="nearest")
 
     self.conv4_1 = nn.Conv2d(in_channels=512, out_channels=256, kernel_size=3, stride=1, padding=0)
 
@@ -104,15 +105,15 @@ class Decoder(nn.Module):
 
 
   def forward(self, x):
-    out = self.UpSample(F.relu(self.conv4_1(self.padding(x))))
+    out = self.US(F.relu(self.conv4_1(self.padding(x))))
 
     out = F.relu(self.conv3_1(self.padding(out)))
     out = F.relu(self.conv3_2(self.padding(out)))
     out = F.relu(self.conv3_3(self.padding(out)))
-    out = self.UpSample(F.relu(self.conv3_4(self.padding(out))))
+    out = self.US(F.relu(self.conv3_4(self.padding(out))))
 
     out = F.relu(self.conv2_1(self.padding(out)))
-    out = self.UpSample(F.relu(self.conv2_2(self.padding(out))))
+    out = self.US(F.relu(self.conv2_2(self.padding(out))))
     out = F.relu(self.conv1_1(self.padding(out)))
     out = self.conv1_2(self.padding(out))
     return out
@@ -123,11 +124,11 @@ class DecodedRes(nn.Module):
     super(DecodedRes,self).__init__()
     self.pad = nn.ReflectionPad2d(padding=1)
     self.US = nn.Upsample(scale_factor = 2, mode = 'nearest') 
-    self.r = residuals
+    self.r = residuals # This is a boolean that inactivate the residual block if set to false.
     self.conv5_1 = nn.Conv2d(512,512,kernel_size = (3,3), padding = 0, bias = True)
     self.conv5_2 = nn.Conv2d(512,512,kernel_size = (3,3), padding = 0, bias = True)
     
-    if self.r:
+    if self.r: # These are the residual blocks where should be the convolution.
       self.conv4_1_2 = nn.Conv2d(512,256,kernel_size = (3,3), padding = 0, bias = True)
       self.conv3_0_1 = nn.Conv2d(256,128,kernel_size = (3,3), padding = 0, bias = True)
       self.conv3_1_2 = nn.Conv2d(128,128,kernel_size = (3,3), padding = 0, bias = True)
