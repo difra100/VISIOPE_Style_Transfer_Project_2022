@@ -22,7 +22,7 @@ The implementation was done with [pytorch lightning](https://www.pytorchlightnin
     3. Now you can continue to run the cells.   
 
 #### Repository's organization 
-* data/ : After the download and the zip extraction this folder should appear  
+* data/ : After the download and the zip extraction, this folder should appear  
   * mscoco/ : MSCoco dataset  
     * train_/ : Training Set (~30k images)  
     * test_/  : Testing Set  (~200 images)  
