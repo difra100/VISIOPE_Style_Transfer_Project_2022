@@ -11,9 +11,10 @@ The Decoders that were tested are the Resnet34 and its alias network w/o the res
 The heart of their method is in the Adaptive Instance Normalization Layer (AdaIN) that they introduce in the paper.  
 All the details can be found and analyzed in this repository, that is organised as follows:  
 
-#### 2 Notebooks
-* 1_DataPaucity_StyleTransfer.ipynb
-* 2_DataPaucity_StyleTransfer.ipynb  
+### How to use this repository:
+#### We have 2 notebooks
+* TrainingStyleTransfer.ipynb
+* TestingStyleTransfer.ipynb  
 
 The former contains the code for the training loop and the explanation of the method adopted. (The implementation was done with [pytorch lightning](https://www.pytorchlightning.ai/))  
 The latter contains the code with the experiments done with the different Decoders, and with which is possible to observe the difference performances of them with the aid of some interactive tools.  
