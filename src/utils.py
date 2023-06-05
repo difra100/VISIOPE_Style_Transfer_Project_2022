@@ -4,6 +4,7 @@ import torch.nn as nn
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import zipfile
 
 import requests
 
